@@ -199,8 +199,7 @@ Based on the output, the MSE for Random Forest is smaller than the Locally Weigh
 The best hyperparameters are outputted are:
 {'lwr__f': 0.3333333333333333, 'lwr__iter': 1}
 
-`	gs_lowess.score(x,y)
-`
+	gs_lowess.score(x,y)
 
 The mean squarred error of the fitted pipeline on the input data `x` and `y` is:
 -1.6547449275510313
@@ -273,8 +272,7 @@ The best hyperparameters are outputted are:
 {'lwr__f': 0.07142857142857142, 'lwr__iter': 1}
 
 
-`	gs_lowess.score(x,y)
-`
+	gs_lowess.score(x,y)
 
 The mean squarred error of the fitted pipeline on the input data `x` and `y` is:
 -1.6198492233009538
