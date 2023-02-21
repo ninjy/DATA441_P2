@@ -85,7 +85,7 @@
 		delta = np.ones(n)
 		for iteration in  range(iter):
 			for i in  range(n):
-				W = np.diag(w[:,i])
+				W = np.diag(delta).dot(np.diag(w[:,i]))
 				b = np.transpose(x1).dot(W).dot(y)
 				A = np.transpose(x1).dot(W).dot(x1)
 			
@@ -93,7 +93,7 @@
 				beta = linalg.solve(A, b)
 				yest[i] = np.dot(x1[i],beta)
 				
-			residuals = y - yest
+			residuals = y.ravel() - yest
 			s = np.median(np.abs(residuals))
 			delta = np.clip(residuals / (6.0 * s), -1, 1)
 			delta = (1 - delta ** 2) ** 2
@@ -105,10 +105,10 @@
 			output = np.zeros(len(xnew))
 			for i in  range(len(xnew)):
 				ind = np.argsort(np.sqrt(np.sum((x-xnew[i])**2,axis=1)))[:r]
-				pca = PCA(n_components=3)
+				pca = PCA(n_components=2)
 				x_pca = pca.fit_transform(x[ind])
 				tri = Delaunay(x_pca,qhull_options='QJ')
-				f = LinearNDInterpolator(tri,y[ind])
+				f = LinearNDInterpolator(tri,yest[ind])
 				output[i] = f(pca.transform(xnew[i].reshape(1,-1)))
 		if  sum(np.isnan(output))>0:
 			g = NearestNDInterpolator(x,y.ravel())
@@ -117,6 +117,8 @@
 
 
 	xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=123)
+	xtrain = scale.fit_transform(xtrain)
+	xtest = scale.transform(xtest)
 	yhat = L_AG_MD(xtrain,ytrain,xtest,f=1/50,iter=3,intercept=True)
 
 ### Scikit-Learn Compliant Function Version
@@ -176,8 +178,8 @@
 	print('The Cross-validated Mean Squared Error for Locally Weighted Regression is : '+str(np.mean(mse_lwr)))
 	print('The Cross-validated Mean Squared Error for Random Forest is : '+str(np.mean(mse_rf)))
 
-The Cross-validated Mean Squared Error for Locally Weighted Regression is : 26.095266900672478 
-The Cross-validated Mean Squared Error for Random Forest is : 17.210935411185584
+The Cross-validated Mean Squared Error for Locally Weighted Regression is : 22.91945754171102 
+The Cross-validated Mean Squared Error for Random Forest is : 17.173624601909175
 
 Based on the output, the MSE for Random Forest is smaller than the Locally Weighted Regression, which indicates that Random Forest is doing a better job of fitting the data.
 
