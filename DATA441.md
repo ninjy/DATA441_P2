@@ -252,10 +252,10 @@ Since we already defined the dist and L_AG_MD functions, and the Lowess_AG_MD cl
 	print('The Cross-validated Mean Squared Error for Locally Weighted Regression is : '+str(np.mean(mse_lwr)))
 	print('The Cross-validated Mean Squared Error for Random Forest is : '+str(np.mean(mse_rf)))
 	
-The Cross-validated Mean Squared Error for Locally Weighted Regression is : 44.93819920178596 
-The Cross-validated Mean Squared Error for Random Forest is : 45.157001913168806
+The Cross-validated Mean Squared Error for Locally Weighted Regression is : 96.28855156140101 
+The Cross-validated Mean Squared Error for Random Forest is : 45.63543605026065
 
-Based on the output, the MSE for Locally Weighted Regression is smaller than the Random Forest, which indicates that Locally Weighted Regression is doing a better job of fitting the data.
+Based on the output, the MSE for Random Forest is smaller than the Locally Weighted Regression, which indicates that Random Forest is doing a better job of fitting the data.
 
 ### Grid Search CV
 	lwr_pipe = Pipeline([('zscores', StandardScaler()),
