@@ -119,7 +119,7 @@
 	xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=123)
 	xtrain = scale.fit_transform(xtrain)
 	xtest = scale.transform(xtest)
-	yhat = L_AG_MD(xtrain,ytrain,xtest,f=1/50,iter=3,intercept=True)
+	yhat = L_AG_MD(xtrain,ytrain,xtest,f=1/3,iter=3,intercept=True)
 
 ### Scikit-Learn Compliant Function Version
 	class Lowess_AG_MD:
@@ -156,7 +156,7 @@
 	mse_rf = []
 	kf = KFold(n_splits=10,shuffle=True,random_state=1234)
 	model_rf = RandomForestRegressor(n_estimators=200,max_depth=5)
-	model_lw = Lowess_AG_MD(f=1/65,iter=3,intercept=True)
+	model_lw = Lowess_AG_MD(f=1/3,iter=2,intercept=True)
 
 	for idxtrain, idxtest in kf.split(x):
 		xtrain = x[idxtrain]
@@ -178,10 +178,10 @@
 	print('The Cross-validated Mean Squared Error for Locally Weighted Regression is : '+str(np.mean(mse_lwr)))
 	print('The Cross-validated Mean Squared Error for Random Forest is : '+str(np.mean(mse_rf)))
 
-The Cross-validated Mean Squared Error for Locally Weighted Regression is : 22.91945754171102 
-The Cross-validated Mean Squared Error for Random Forest is : 17.173624601909175
+The Cross-validated Mean Squared Error for Locally Weighted Regression is : 16.37831448828224 
+The Cross-validated Mean Squared Error for Random Forest is : 17.152729883572956
 
-Based on the output, the MSE for Random Forest is smaller than the Locally Weighted Regression, which indicates that Random Forest is doing a better job of fitting the data.
+Based on the output, the MSE for Locally Weighted Regression is smaller than the Random Forest, which indicates that Locally Weighted Regression is doing a better job of fitting the data.
 
 ### Grid Search CV
 	lwr_pipe = Pipeline([('zscores', StandardScaler()),
@@ -199,12 +199,12 @@ Based on the output, the MSE for Random Forest is smaller than the Locally Weigh
 	gs_lowess.best_params_
 
 The best hyperparameters are outputted are:
-{'lwr__f': 0.3333333333333333, 'lwr__iter': 1}
+{'lwr__f': 0.3333333333333333, 'lwr__iter': 2}
 
 	gs_lowess.score(x,y)
 
 The mean squarred error of the fitted pipeline on the input data `x` and `y` is:
--1.6547449275510313
+-15.324988522298963
 
 
 ## Concrete Dataset
@@ -219,7 +219,9 @@ The mean squarred error of the fitted pipeline on the input data `x` and `y` is:
 	x = scale.fit_transform(x)
 
 	xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=123)
-	yhat = L_AG_MD(xtrain,ytrain,xtest,f=1/50,iter=3,intercept=True)
+	xtrain = scale.fit_transform(xtrain)
+	xtest = scale.transform(xtest)
+	yhat = L_AG_MD(xtrain,ytrain,xtest,f=1/3,iter=3,intercept=True)
 
 Since we already defined the dist and L_AG_MD functions, and the Lowess_AG_MD class before, we won't redefine it for the Concrete dataset.
 
@@ -228,7 +230,7 @@ Since we already defined the dist and L_AG_MD functions, and the Lowess_AG_MD cl
 	mse_rf = []
 	kf = KFold(n_splits=10,shuffle=True,random_state=1234)
 	model_rf = RandomForestRegressor(n_estimators=200,max_depth=5)
-	model_lw = Lowess_AG_MD(f=1/65,iter=3,intercept=True)
+	model_lw = Lowess_AG_MD(f=1/3,iter=2,intercept=True)
 
 	for idxtrain, idxtest in kf.split(x):
 		xtrain = x[idxtrain]
